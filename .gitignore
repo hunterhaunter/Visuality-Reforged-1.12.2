@@ -4,7 +4,7 @@ build/
 out/
 bin/
 
-# Run / dev artifacts
+# Run 
 run/
 *.log
 
@@ -24,5 +24,5 @@ eclipse/
 Thumbs.db
 .DS_Store
 
-# Internal working notes (not shipped)
+
 _docs/
