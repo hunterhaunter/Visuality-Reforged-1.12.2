@@ -6,10 +6,9 @@
   <p>Little visual improvements that add a bunch of new ambient particles. Client side and cosmetic only.</p>
 </div>
 
-A Minecraft Forge 1.12.2 port of Visuality, originally by PinkGoosik (Fabric) and ported to
+A 1.12.2 port of Visuality, originally by PinkGoosik (Fabric) and ported to
 modern Forge as Visuality: Reforged by LimonBlaze. The look and behaviour of the original are
-preserved, rebuilt on the 1.12.2 Forge rendering pipeline (custom client particles plus mixins,
-since 1.12.2 has no particle registry or datapack system).
+preserved, rebuilt on the 1.12.2.
 
 ## Features
 
@@ -22,7 +21,7 @@ since 1.12.2 has no particle registry or datapack system).
   feathers, and villagers drop emeralds when hit. The amount scales with the attacker's weapon damage.
 - **Water crowns.** Rain raises small biome tinted ripples on open water.
 
-Everything is client side, so the mod can join any server.
+Everything is client side.
 
 ## Requirements
 
@@ -36,26 +35,12 @@ Everything is client side, so the mod can join any server.
 2. Drop MixinBooter and `visuality-1.0.jar` into your `mods` folder.
 3. Launch the game.
 
-## Building from source
-
-```
-./gradlew build
-```
-
-The built jar is written to `build/libs/`.
-
 ## Known issues
 
 - **Water crowns at grazing angles.** Water crown particles render as a flat quad on the block
   texture atlas. Viewed from a very shallow angle they can darken, because at that angle the GPU
   samples high mipmap levels of a small atlas sprite. They look correct from above and up close.
   Candidate fixes are tracked for a future update.
-
-## Credits
-
-- Original mod: PinkGoosik
-- Modern Forge port (Visuality: Reforged): LimonBlaze
-- 1.12.2 Forge port: hunterhaunter
 
 ## License
 
