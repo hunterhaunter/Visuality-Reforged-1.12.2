@@ -1,0 +1,12 @@
+visuality.config.title=Настройки Visuality
+visuality.config.general=Общие
+visuality.config.slime=Слизневые капли включены
+visuality.config.charge=Частицы заряда включены
+visuality.config.sparkle=Искристые частицы включены
+visuality.config.soul=Частицы душ включены
+visuality.config.waterCircle=Водные круги включены
+visuality.config.waterCircle.colored=Цветные водные круги
+visuality.config.waterCircle.density=Плотность водных кругов
+visuality.config.hitParticles=Частицы удара включены
+visuality.config.shinyArmor=Блестящая броня включена
+visuality.config.shinyBlocks=Блестящие блоки включены
