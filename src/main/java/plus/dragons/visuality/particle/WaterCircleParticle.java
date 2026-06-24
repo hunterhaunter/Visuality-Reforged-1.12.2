@@ -15,7 +15,7 @@ import plus.dragons.visuality.client.VisualityParticles;
  * {@code WaterCircleParticle}.
  *
  * <p>Renders as a single quad lying in the XZ plane (normal up), NOT
- * billboarded. 5-frame animation over a 5-7 tick life. Alpha fades in the
+ * billboarded. 5-frame animation over a 5–7 tick life. Alpha fades in the
  * second half.
  */
 @SideOnly(Side.CLIENT)
@@ -41,7 +41,7 @@ public class WaterCircleParticle extends Particle {
         this.motionX = 0;
         this.motionY = 0;
         this.motionZ = 0;
-        this.particleScale = 0.4f; // TUNE: world-space half-size of the flat ring (render uses it directly)
+        this.particleScale = 0.4f; // world-space half-size of the flat ring (render uses it directly)
         this.setParticleTexture(frames[0]);
     }
 

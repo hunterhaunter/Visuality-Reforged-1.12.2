@@ -52,8 +52,8 @@ public class MixinBlockLiquid {
             // 1.12.2 has no such field - biome.getWaterColorMultiplier() is ~0xFFFFFF
             // (white) for almost every biome, which is why circles rendered white. Instead
             // tint a base water blue by the biome-BLENDED water multiplier (BiomeColorHelper
-            // blends neighbouring biomes), giving blue circles normally and a green shift in
-            // swamps - matching the 1.20 biome-dependent look.
+            // does the neighbour blend the user remembers), giving blue circles normally and
+            // a green shift in swamps - matching the 1.20 biome-dependent look.
             int multiplier = BiomeColorHelper.getWaterColorAtPos(world, pos);
             final int base = 0x3F76E4; // modern default water blue
             int r = ((base >> 16) & 0xFF) * ((multiplier >> 16) & 0xFF) / 255;

@@ -21,11 +21,27 @@ public class FeatherParticle extends Particle {
     public FeatherParticle(World world, double x, double y, double z,
                            double mx, double my, double mz) {
         super(world, x, y, z, mx, my, mz);
+        // Modern FeatherParticle extends RisingParticle: damp the 7-arg ctor's random spawn
+        // velocity to 1% and add a ±0.05 spawn jitter, so feathers burst in the tight modern
+        // pattern rather than flying off in the random directions the raw 1.12.2 ctor injects.
+        // motionY is overwritten below, so only X/Z need damping.
+        this.motionX *= 0.01;
+        this.motionZ *= 0.01;
+        this.setPosition(
+                this.posX + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.05,
+                this.posY + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.05,
+                this.posZ + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.05);
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
         this.motionY = -0.25;
         this.particleMaxAge = (int) (8.0 / (Math.random() * 0.8 + 0.2)) + 12;
         this.particleAngle = this.rand.nextFloat() * (float) Math.PI * 2.0F;
         this.prevParticleAngle = this.particleAngle;
-        this.multipleParticleScaleBy(0.7F + this.rand.nextFloat() * 0.6F); // mirrors 1.20 m_6569_
+        // Modern m_6569_(0.7..1.2) MULTIPLIES the random base quadSize; multipleParticleScaleBy
+        // does the same on 1.12.2's random 1.0..2.0 base so render half-size matches 1:1.
+        // (Overwriting with *2.0 made feathers oversized, see SolidFallingParticle.)
+        this.multipleParticleScaleBy(0.7F + this.rand.nextInt(6) / 10.0F);
         this.setParticleTexture(VisualityParticles.feather());
     }
 
@@ -59,9 +75,10 @@ public class FeatherParticle extends Particle {
         // base physics: gravity (none by default), 0.98 air friction
         this.motionY -= 0.04 * (double) this.particleGravity;
         this.move(this.motionX, this.motionY, this.motionZ);
-        this.motionX *= 0.98;
-        this.motionY *= 0.98;
-        this.motionZ *= 0.98;
+        // RisingParticle friction is 0.96 (not the 0.98 vanilla default) - applied to all axes.
+        this.motionX *= 0.96;
+        this.motionY *= 0.96;
+        this.motionZ *= 0.96;
         if (this.onGround) {
             this.motionX *= 0.7;
             this.motionZ *= 0.7;

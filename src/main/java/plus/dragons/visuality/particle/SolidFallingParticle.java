@@ -16,7 +16,26 @@ public class SolidFallingParticle extends Particle {
                                  double mx, double my, double mz,
                                  TextureAtlasSprite sprite) {
         super(world, x, y, z, mx, my, mz);
-        this.multipleParticleScaleBy(1.1F + this.rand.nextFloat() * 0.6F); // mirrors 1.20 m_6569_
+        // Modern SolidFallingParticle extends RisingParticle, whose ctor damps the base random
+        // spawn velocity to 1% (xd = xd*0.01 + spawnVel) and adds a small ±0.05 spawn jitter.
+        // 1.12.2's 7-arg Particle ctor injects that same random spherical velocity, so WITHOUT
+        // this damp bones shot off in random directions instead of the tight modern up-and-out
+        // ±0.2 burst. motionY is overwritten below, so only X/Z need damping.
+        this.motionX *= 0.01D;
+        this.motionZ *= 0.01D;
+        this.setPosition(
+                this.posX + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.05D,
+                this.posY + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.05D,
+                this.posZ + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.05D);
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
+        // Modern m_6569_(1.1..1.6) MULTIPLIES the random base quadSize (0.1*(1.0..2.0)).
+        // 1.12.2 renders half-size = 0.1F * particleScale on the identical random 1.0..2.0 base,
+        // and multipleParticleScaleBy multiplies it (and the bbox) exactly like m_6569_ - so this
+        // matches modern 1:1. (Overwriting with *2.0 dropped the small half of the range and made
+        // every bone oversized.)
+        this.multipleParticleScaleBy(1.1F + this.rand.nextInt(6) / 10.0F);
         this.particleAngle = this.rand.nextFloat() * (float)(Math.PI * 2.0);
         this.prevParticleAngle = this.particleAngle;
         this.motionY = -0.25D;
@@ -61,9 +80,10 @@ public class SolidFallingParticle extends Particle {
         // base physics: gravity + friction
         this.motionY -= 0.04D * (double)this.particleGravity;
         this.move(this.motionX, this.motionY, this.motionZ);
-        this.motionX *= 0.98D;
-        this.motionY *= 0.98D;
-        this.motionZ *= 0.98D;
+        // RisingParticle friction is 0.96 (not the 0.98 vanilla default) - applied to all axes.
+        this.motionX *= 0.96D;
+        this.motionY *= 0.96D;
+        this.motionZ *= 0.96D;
         if (this.onGround) {
             this.motionX *= 0.7D;
             this.motionZ *= 0.7D;

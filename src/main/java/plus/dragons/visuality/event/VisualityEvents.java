@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
@@ -112,11 +113,12 @@ public final class VisualityEvents {
         if (!(target instanceof EntityLivingBase)) {
             return;
         }
-        double damage = player.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+        double damage = computeAttackDamage(player);
         if (damage <= 0.0) {
             return;
         }
-        int count = MathHelper.clamp(MathHelper.ceil(damage), 1, 20);
+        int count = MathHelper.clamp(MathHelper.ceil(damage),
+                VisualityConfig.hitMinAmount, VisualityConfig.hitMaxAmount);
 
         double x = target.posX;
         double y = target.posY + target.height * 0.5;
@@ -133,6 +135,39 @@ public final class VisualityEvents {
                 FeatherParticle.spawn(world, x, y, z, 0, 0, 0);
             }
         }
+    }
+
+    /**
+     * Computes the player's effective melee attack damage from the mainhand item's
+     * ATTACK_DAMAGE modifiers, mirroring the modern {@code EntityHitParticleConfig.getAttackDamage}.
+     *
+     * <p>Necessary because 1.12.2 applies held-item attribute modifiers to the attribute map
+     * <b>server-side only</b> - {@code EntityLivingBase}'s equipment loop casts {@code world}
+     * to {@code WorldServer}, so it never runs on the client. Reading
+     * {@code getAttributeValue()} on the client therefore always returns the base 1.0
+     * regardless of weapon, which made every hit spawn exactly one particle.
+     */
+    private static double computeAttackDamage(EntityPlayer player) {
+        double base = player.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue();
+        ItemStack held = player.getHeldItemMainhand();
+        double addition = 0.0;
+        double multiplyBase = 1.0;
+        double multiplyTotal = 1.0;
+        for (AttributeModifier modifier : held.getAttributeModifiers(EntityEquipmentSlot.MAINHAND)
+                .get(SharedMonsterAttributes.ATTACK_DAMAGE.getName())) {
+            switch (modifier.getOperation()) {
+                case 0: // ADDITION
+                    addition += modifier.getAmount();
+                    break;
+                case 1: // MULTIPLY_BASE
+                    multiplyBase += modifier.getAmount();
+                    break;
+                case 2: // MULTIPLY_TOTAL
+                    multiplyTotal *= 1.0 + modifier.getAmount();
+                    break;
+            }
+        }
+        return (base + addition) * multiplyBase * multiplyTotal;
     }
 
     private void spawnChargeParticles(EntityLivingBase entity, World world) {

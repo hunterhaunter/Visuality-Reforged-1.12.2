@@ -47,10 +47,10 @@ public class ChargeParticle extends Particle {
         return 1;
     }
 
-    @Override
-    public int getBrightnessForRender(float partialTicks) {
-        return 0xF000F0;
-    }
+    // NOTE: modern ChargeParticle does NOT override the lightmap - it renders at real world light
+    // (only SparkleParticle forces fullbright in modern). Leaving getBrightnessForRender at the
+    // vanilla default matches 1.20.1. (The port previously forced 0xF000F0 fullbright, making
+    // charged-creeper sparks glow in the dark unlike modern.)
 
     public static void spawn(World world, double x, double y, double z) {
         Minecraft.getMinecraft().effectRenderer.addEffect(new ChargeParticle(world, x, y, z));

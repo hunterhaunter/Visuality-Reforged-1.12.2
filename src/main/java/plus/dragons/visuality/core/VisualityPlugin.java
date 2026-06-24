@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Coremod entry point. Queues the Visuality mixin config through MixinBooter's
  * own Mixin instance via {@link IEarlyMixinLoader} (do NOT call MixinBootstrap
- * here - see EasyMagicPlugin notes).
+ * here).
  */
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 public class VisualityPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {

@@ -10,3 +10,6 @@ visuality.config.waterCircle.density=Water Circles Density
 visuality.config.hitParticles=Hit Particles Enabled
 visuality.config.shinyArmor=Shiny Armor Enabled
 visuality.config.shinyBlocks=Shiny Blocks Enabled
+visuality.config.waterCircle.force=Force Water Circles (override other mods)
+visuality.config.hitParticles.min=Hit Particles Min Count
+visuality.config.hitParticles.max=Hit Particles Max Count

@@ -21,7 +21,7 @@ public class SlimeParticle extends Particle {
         this.motionY *= 0.1;
         this.motionZ *= 0.1;
         this.particleGravity = 1.0f;
-        this.multipleParticleScaleBy(scale + this.rand.nextFloat() * 0.6f); // mirrors 1.20 m_6569_
+        this.multipleParticleScaleBy(scale + this.rand.nextInt(6) / 10.0f); // 1.20 m_6569_(scale + rand(6)/10)
         this.particleMaxAge = 10 + this.rand.nextInt(7);
         this.setParticleTexture(sprite);
     }

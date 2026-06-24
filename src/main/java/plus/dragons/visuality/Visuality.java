@@ -18,7 +18,8 @@ import plus.dragons.visuality.proxy.CommonProxy;
  * lets it join any server (including vanilla / servers without the mod).
  */
 @Mod(modid = Visuality.ID, name = Visuality.NAME, version = Visuality.VERSION,
-        clientSideOnly = true, acceptableRemoteVersions = "*")
+        clientSideOnly = true, acceptableRemoteVersions = "*",
+        guiFactory = "plus.dragons.visuality.client.config.VisualityGuiFactory")
 public class Visuality {
 
     public static final String ID = "visuality";
